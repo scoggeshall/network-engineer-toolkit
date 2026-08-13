@@ -22,6 +22,23 @@ npm test
 
 The subnet engine is pure TypeScript and has no backend or network dependency.
 
+## Discover a connected switchport
+
+Run **Network Tools: Discover Switchport**, then explicitly select the local
+Windows adapter connected to the switch. The command passively listens for LLDP
+and CDP advertisements and shows the best correlated switch identity, port, and
+management details in the **Network Engineer Toolkit** Output Channel. It sends no
+discovery traffic and does not require Internet access or the Ubuntu backend.
+
+For this development milestone, local capture requires Python 3, Scapy, and the
+Npcap Windows capture driver. Wireshark and TShark are not used or required. The
+optional `networkEngineerToolkit.pythonPath` setting selects Python; otherwise the
+extension tries `py -3` and then `python`.
+
+Future packaging is intended to ship the helper and Python/Scapy runtime as a
+self-contained executable. That packaging is not implemented yet. Npcap remains
+an explicit prerequisite; no redistribution or installer assumptions are made.
+
 ## DNS lookup from the lab server
 
 Set `networkEngineerToolkit.backendUrl` to the base URL of the running Ubuntu

@@ -12,6 +12,7 @@
   ],
   "activationEvents": [
     "onCommand:networkEngineerToolkit.analyzeSubnet",
+    "onCommand:networkEngineerToolkit.discoverSwitchport",
     "onCommand:networkEngineerToolkit.remoteDnsLookup"
   ],
   "main": "./out/src/extension.js",
@@ -20,6 +21,10 @@
       {
         "command": "networkEngineerToolkit.analyzeSubnet",
         "title": "Network Tools: Analyze IP/Subnet"
+      },
+      {
+        "command": "networkEngineerToolkit.discoverSwitchport",
+        "title": "Network Tools: Discover Switchport"
       },
       {
         "command": "networkEngineerToolkit.remoteDnsLookup",
@@ -33,6 +38,12 @@
           "type": "string",
           "default": "",
           "description": "Base URL of the Network Engineer Toolkit backend used for remote tools."
+        },
+        "networkEngineerToolkit.pythonPath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Optional Python 3 executable used by the local Switchport Discovery helper during development."
         }
       }
     }
@@ -40,7 +51,8 @@
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('out', { recursive: true, force: true })\"",
     "compile": "tsc -p tsconfig.json",
-    "test": "npm run clean && npm run compile && node --test out/test/*.test.js"
+    "test": "npm run clean && npm run compile && node --test out/test/*.test.js",
+    "test:helper": "python -m unittest discover -s helper/test -v"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
