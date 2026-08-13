@@ -1,0 +1,35 @@
+{
+  "name": "network-engineer-toolkit",
+  "displayName": "Network Engineer Toolkit",
+  "description": "Local network engineering tools for Visual Studio Code.",
+  "version": "0.1.0",
+  "publisher": "scoggeshall",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:networkEngineerToolkit.analyzeSubnet"
+  ],
+  "main": "./out/src/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "networkEngineerToolkit.analyzeSubnet",
+        "title": "Network Tools: Analyze IP/Subnet"
+      }
+    ]
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('out', { recursive: true, force: true })\"",
+    "compile": "tsc -p tsconfig.json",
+    "test": "npm run clean && npm run compile && node --test out/test/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.9.0"
+  }
+}

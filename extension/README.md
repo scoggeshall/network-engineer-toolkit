@@ -1,10 +1,23 @@
-# VS Code Extension
+# Network Engineer Toolkit for VS Code
 
-TypeScript-based VS Code extension.
+Local network engineering tools for Visual Studio Code.
 
-Initial responsibilities:
+## Analyze an IPv4 subnet
 
-- Local subnet/IP tools
-- Local diagnostics
-- Backend API client
-- Network engineering commands and views
+Run **Network Tools: Analyze IP/Subnet** from the Command Palette. Enter an IPv4
+address with an optional CIDR prefix, such as `10.40.52.17/27`. A bare address is
+treated as a `/32` host route.
+
+If the active editor has selected text, a valid selection is analyzed directly.
+An invalid selection opens the input box with that text ready to correct. Results
+are shown in the **Network Engineer Toolkit** Output Channel.
+
+## Development
+
+```powershell
+npm install
+npm run compile
+npm test
+```
+
+The subnet engine is pure TypeScript and has no backend or network dependency.
