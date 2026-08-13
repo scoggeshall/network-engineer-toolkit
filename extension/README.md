@@ -1,6 +1,6 @@
 # Network Engineer Toolkit for VS Code
 
-Local network engineering tools for Visual Studio Code.
+Local and remote network engineering tools for Visual Studio Code.
 
 ## Analyze an IPv4 subnet
 
@@ -21,3 +21,14 @@ npm test
 ```
 
 The subnet engine is pure TypeScript and has no backend or network dependency.
+
+## DNS lookup from the lab server
+
+Set `networkEngineerToolkit.backendUrl` to the base URL of the running Ubuntu
+backend, then run **Network Tools: DNS Lookup from Lab Server**. The command accepts
+a hostname, IPv4 address, or IPv6 address and shows the resolver host in the
+**Network Engineer Toolkit** Output Channel.
+
+Selected non-empty editor text is used as the query. Otherwise the command prompts
+for a value. DNS resolution always occurs through the configured backend; the
+extension does not fall back to local DNS resolution.

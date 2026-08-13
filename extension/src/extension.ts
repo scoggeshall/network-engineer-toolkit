@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 
 import { registerAnalyzeSubnetCommand } from "./commands/analyzeSubnet";
+import { registerRemoteDnsLookupCommand } from "./commands/dnsLookup";
 
 export function activate(context: vscode.ExtensionContext): void {
   const outputChannel = vscode.window.createOutputChannel(
@@ -10,6 +11,7 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     outputChannel,
     registerAnalyzeSubnetCommand(outputChannel),
+    registerRemoteDnsLookupCommand(outputChannel),
   );
 }
 
