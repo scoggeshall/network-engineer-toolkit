@@ -1,0 +1,61 @@
+# Operating systems
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Node / TypeScript
+node_modules/
+dist/
+out/
+*.vsix
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# uv / local environments
+.python-version
+
+# Secrets / environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Packet captures
+*.pcap
+*.pcapng
+*.cap
+
+# Generated reports
+reports/
+artifacts/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.log
