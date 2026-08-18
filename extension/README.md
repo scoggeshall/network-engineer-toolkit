@@ -29,14 +29,53 @@ and CDP advertisements and shows the best correlated switch identity, port, and
 management details in the **Network Engineer Toolkit** Output Channel. It sends no
 discovery traffic and does not require Internet access.
 
-During development, local capture requires Python 3, Scapy, and the Npcap Windows
-capture driver. Wireshark and TShark are not used or required. The optional
+Local capture requires Python 3, Scapy, and the Npcap Windows capture driver.
+Wireshark and TShark are not used or required. The optional
 `networkEngineerToolkit.pythonPath` setting selects Python; otherwise the extension
 tries `py -3` and then `python`.
 
-Future packaging may ship the helper and Python/Scapy runtime as a self-contained
-executable. That packaging is not implemented. Npcap remains an explicit
+Python, Scapy, and Npcap are not bundled in v0.1.0. Npcap remains an explicit
 prerequisite; no redistribution or installer assumptions are made.
+
+## Requirements
+
+- Windows
+- Visual Studio Code 1.85.0 or newer
+- Windows PowerShell for local DNS lookups
+- Python 3, Scapy, and Npcap for Switchport Discovery
+
+Wireshark, TShark, Ubuntu, and a Toolkit backend are not required. The extension
+runs locally and does not start or contact a Toolkit server.
+
+## Build an installable VSIX
+
+From the `extension` directory:
+
+```powershell
+npm install
+npm run package
+```
+
+The package command performs a clean production TypeScript compile and writes
+`dist/network-engineer-toolkit-0.1.0.vsix`. The production package includes the
+compiled extension and its PowerShell and Python helper source, but excludes test
+code and development artifacts.
+
+## Install v0.1.0
+
+In VS Code, open **Extensions**, choose **Views and More Actions...**, select
+**Install from VSIX...**, and choose `network-engineer-toolkit-0.1.0.vsix`.
+
+For an isolated named profile, use the profile-specific CLI form:
+
+```powershell
+code --profile "Network Engineer Toolkit Dev" --install-extension `
+  .\dist\network-engineer-toolkit-0.1.0.vsix
+```
+
+This repository uses the existing `Network Engineer Toolkit Dev` profile for
+installed-extension testing. Do not install development builds into a normal or
+default VS Code profile.
 
 ## Development
 

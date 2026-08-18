@@ -4,16 +4,27 @@
   "description": "Local network engineering tools for Visual Studio Code.",
   "version": "0.1.0",
   "publisher": "scoggeshall",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scoggeshall/network-engineer-toolkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/scoggeshall/network-engineer-toolkit/issues"
+  },
+  "homepage": "https://github.com/scoggeshall/network-engineer-toolkit#readme",
+  "keywords": [
+    "networking",
+    "network-engineering",
+    "dns",
+    "subnet",
+    "lldp",
+    "cdp"
+  ],
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
     "Other"
-  ],
-  "activationEvents": [
-    "onCommand:networkEngineerToolkit.analyzeSubnet",
-    "onCommand:networkEngineerToolkit.discoverSwitchport",
-    "onCommand:networkEngineerToolkit.dnsLookup"
   ],
   "main": "./out/src/extension.js",
   "contributes": {
@@ -46,12 +57,17 @@
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('out', { recursive: true, force: true })\"",
     "compile": "tsc -p tsconfig.json",
+    "compile:production": "npm run clean && tsc -p tsconfig.production.json",
+    "vscode:prepublish": "npm run compile:production",
+    "package:prepare": "node -e \"require('node:fs').mkdirSync('dist', { recursive: true })\"",
+    "package": "npm run package:prepare && vsce package --out dist/network-engineer-toolkit-0.1.0.vsix",
     "test": "npm run clean && npm run compile && node --test out/test/*.test.js",
     "test:helper": "python -m unittest discover -s helper/test -v"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "3.9.2",
     "typescript": "^5.9.0"
   }
 }
