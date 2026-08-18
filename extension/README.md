@@ -34,7 +34,7 @@ Wireshark and TShark are not used or required. The optional
 `networkEngineerToolkit.pythonPath` setting selects Python; otherwise the extension
 tries `py -3` and then `python`.
 
-Python, Scapy, and Npcap are not bundled in v0.1.0. Npcap remains an explicit
+Python, Scapy, and Npcap are not bundled in v0.1.x. Npcap remains an explicit
 prerequisite; no redistribution or installer assumptions are made.
 
 ## Requirements
@@ -57,20 +57,20 @@ npm run package
 ```
 
 The package command performs a clean production TypeScript compile and writes
-`dist/network-engineer-toolkit-0.1.0.vsix`. The production package includes the
+`dist/network-engineer-toolkit-0.1.1.vsix`. The production package includes the
 compiled extension and its PowerShell and Python helper source, but excludes test
 code and development artifacts.
 
-## Install v0.1.0
+## Install v0.1.1
 
 In VS Code, open **Extensions**, choose **Views and More Actions...**, select
-**Install from VSIX...**, and choose `network-engineer-toolkit-0.1.0.vsix`.
+**Install from VSIX...**, and choose `network-engineer-toolkit-0.1.1.vsix`.
 
 For an isolated named profile, use the profile-specific CLI form:
 
 ```powershell
 code --profile "Network Engineer Toolkit Dev" --install-extension `
-  .\dist\network-engineer-toolkit-0.1.0.vsix
+  .\dist\network-engineer-toolkit-0.1.1.vsix
 ```
 
 This repository uses the existing `Network Engineer Toolkit Dev` profile for

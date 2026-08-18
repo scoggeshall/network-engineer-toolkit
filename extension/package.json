@@ -2,7 +2,7 @@
   "name": "network-engineer-toolkit",
   "displayName": "Network Engineer Toolkit",
   "description": "Local network engineering tools for Visual Studio Code.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "scoggeshall",
   "repository": {
     "type": "git",
@@ -60,7 +60,7 @@
     "compile:production": "npm run clean && tsc -p tsconfig.production.json",
     "vscode:prepublish": "npm run compile:production",
     "package:prepare": "node -e \"require('node:fs').mkdirSync('dist', { recursive: true })\"",
-    "package": "npm run package:prepare && vsce package --out dist/network-engineer-toolkit-0.1.0.vsix",
+    "package": "npm run package:prepare && vsce package --out dist",
     "test": "npm run clean && npm run compile && node --test out/test/*.test.js",
     "test:helper": "python -m unittest discover -s helper/test -v"
   },

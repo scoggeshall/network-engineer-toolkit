@@ -41,3 +41,31 @@ export function normalizeDnsQuery(value: string): string {
   }
   return query;
 }
+
+export function tryNormalizeDnsSelection(value: string | undefined): string | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+
+  try {
+    return normalizeDnsQuery(value);
+  } catch (error: unknown) {
+    if (error instanceof DnsValidationError) {
+      return undefined;
+    }
+    throw error;
+  }
+}
+
+export async function resolveDnsCommandQuery(
+  selectedText: string | undefined,
+  promptForQuery: () => Promise<string | undefined>,
+): Promise<string | undefined> {
+  const selectedQuery = tryNormalizeDnsSelection(selectedText);
+  if (selectedQuery !== undefined) {
+    return selectedQuery;
+  }
+
+  const input = await promptForQuery();
+  return input === undefined ? undefined : normalizeDnsQuery(input);
+}

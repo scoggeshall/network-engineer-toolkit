@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 
 import { DnsHelperError, lookupDns } from "../local/dns/helperClient";
 import { formatDnsLookup } from "../local/dns/presentation";
-import { DnsValidationError, normalizeDnsQuery } from "../local/dns/query";
+import { DnsValidationError, resolveDnsCommandQuery } from "../local/dns/query";
 
 const COMMAND_ID = "networkEngineerToolkit.dnsLookup";
 
@@ -11,20 +11,17 @@ export function registerDnsLookupCommand(
   outputChannel: vscode.OutputChannel,
 ): vscode.Disposable {
   return vscode.commands.registerCommand(COMMAND_ID, async () => {
-    const selectedText = getSelectedText();
-    const input = selectedText ?? (await promptForDnsQuery());
-    if (input === undefined) {
-      return;
-    }
-
     try {
+      const query = await resolveDnsCommandQuery(getSelectedText(), promptForDnsQuery);
+      if (query === undefined) {
+        return;
+      }
       if (process.platform !== "win32") {
         throw new DnsHelperError(
           "unsupported_platform",
           "DNS Lookup currently uses Resolve-DnsName on the local Windows workstation.",
         );
       }
-      const query = normalizeDnsQuery(input);
       const helperPath = context.asAbsolutePath("helper/dns/main.ps1");
       const result = await vscode.window.withProgress(
         {
