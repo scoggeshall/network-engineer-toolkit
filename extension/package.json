@@ -1,7 +1,7 @@
 {
   "name": "network-engineer-toolkit",
   "displayName": "Network Engineer Toolkit",
-  "description": "Local and remote network engineering tools for Visual Studio Code.",
+  "description": "Local network engineering tools for Visual Studio Code.",
   "version": "0.1.0",
   "publisher": "scoggeshall",
   "engines": {
@@ -13,7 +13,7 @@
   "activationEvents": [
     "onCommand:networkEngineerToolkit.analyzeSubnet",
     "onCommand:networkEngineerToolkit.discoverSwitchport",
-    "onCommand:networkEngineerToolkit.remoteDnsLookup"
+    "onCommand:networkEngineerToolkit.dnsLookup"
   ],
   "main": "./out/src/extension.js",
   "contributes": {
@@ -27,18 +27,13 @@
         "title": "Network Tools: Discover Switchport"
       },
       {
-        "command": "networkEngineerToolkit.remoteDnsLookup",
-        "title": "Network Tools: DNS Lookup from Lab Server"
+        "command": "networkEngineerToolkit.dnsLookup",
+        "title": "Network Tools: DNS Lookup"
       }
     ],
     "configuration": {
       "title": "Network Engineer Toolkit",
       "properties": {
-        "networkEngineerToolkit.backendUrl": {
-          "type": "string",
-          "default": "",
-          "description": "Base URL of the Network Engineer Toolkit backend used for remote tools."
-        },
         "networkEngineerToolkit.pythonPath": {
           "type": "string",
           "default": "",

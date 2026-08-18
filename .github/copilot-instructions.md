@@ -1,15 +1,15 @@
 # Repository Instructions
 
 Follow [`../AGENTS.md`](../AGENTS.md) as the authoritative repository policy and
-[`../docs/architecture.md`](../docs/architecture.md) for product and cross-host
-architecture.
+[`../docs/architecture.md`](../docs/architecture.md) for product architecture.
 
-Use the Windows clone as the primary control environment. Edit `extension/`,
-documentation, GitHub metadata, and repository-level files on Windows; develop
-`backend/` on Ubuntu through SSH host `lab01`. Do not independently edit the same
-files on both hosts or use parallel Codex conversations for the two clones.
+Network Engineer Toolkit is a local-first Windows VS Code extension. TypeScript
+owns the product experience and may orchestrate bounded, one-shot PowerShell or
+Python helpers. Do not add a server, daemon, localhost API, remote execution tier,
+or Toolkit-specific client/server architecture.
 
-Keep changes small and testable. Preserve explicit network vantage points,
-structured errors, sensitive-data handling, allowlisted read-only diagnostics, and
-the prohibition on arbitrary shell or raw SSH exposure through the application.
-Do not add premature infrastructure or implementation beyond the active request.
+Keep changes small and locally testable. Preserve structured helper boundaries,
+validated argument arrays, explicit diagnostic vantage points, practical errors,
+sensitive-data handling, and the prohibition on arbitrary shell or raw SSH
+exposure. Do not modify the user's normal VS Code profile or environment. Do not
+create GitHub Actions workflows or rely on hosted CI, builds, tests, or packaging.

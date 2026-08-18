@@ -83,7 +83,6 @@ describe("switchport helper contract", () => {
       { adapterId: adapter.id, timeoutSeconds: 45, graceSeconds: 12 },
     );
     assert.equal(args[args.indexOf("--adapter") + 1], adapter.id);
-    assert.ok(!args.includes("backendUrl"));
   });
 
   it("parses adapter JSON", () => {

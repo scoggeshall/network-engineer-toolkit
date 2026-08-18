@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 
 import { registerAnalyzeSubnetCommand } from "./commands/analyzeSubnet";
 import { registerDiscoverSwitchportCommand } from "./commands/discoverSwitchport";
-import { registerRemoteDnsLookupCommand } from "./commands/dnsLookup";
+import { registerDnsLookupCommand } from "./commands/dnsLookup";
+import { disposeActiveDnsHelpers } from "./local/dns/helperClient";
 import { disposeActiveHelpers } from "./local/switchport/helperClient";
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -14,7 +15,8 @@ export function activate(context: vscode.ExtensionContext): void {
     outputChannel,
     registerAnalyzeSubnetCommand(outputChannel),
     registerDiscoverSwitchportCommand(context, outputChannel),
-    registerRemoteDnsLookupCommand(outputChannel),
+    registerDnsLookupCommand(context, outputChannel),
+    { dispose: disposeActiveDnsHelpers },
     { dispose: disposeActiveHelpers },
   );
 }

@@ -1,18 +1,13 @@
 import * as vscode from "vscode";
 
-import {
-  BackendClient,
-  BackendConfigurationError,
-  BackendHttpError,
-  BackendTimeoutError,
-  BackendUnavailableError,
-  MalformedBackendResponseError,
-} from "../remote/backendClient";
-import { formatDnsLookup } from "../remote/dnsPresentation";
+import { DnsHelperError, lookupDns } from "../local/dns/helperClient";
+import { formatDnsLookup } from "../local/dns/presentation";
+import { DnsValidationError, normalizeDnsQuery } from "../local/dns/query";
 
-const COMMAND_ID = "networkEngineerToolkit.remoteDnsLookup";
+const COMMAND_ID = "networkEngineerToolkit.dnsLookup";
 
-export function registerRemoteDnsLookupCommand(
+export function registerDnsLookupCommand(
+  context: vscode.ExtensionContext,
   outputChannel: vscode.OutputChannel,
 ): vscode.Disposable {
   return vscode.commands.registerCommand(COMMAND_ID, async () => {
@@ -22,17 +17,27 @@ export function registerRemoteDnsLookupCommand(
       return;
     }
 
-    const query = input.trim();
-    if (query.length === 0) {
-      await vscode.window.showErrorMessage("Enter a hostname or IP address.");
-      return;
-    }
-
     try {
-      const backendUrl = vscode.workspace
-        .getConfiguration("networkEngineerToolkit")
-        .get<string>("backendUrl", "");
-      const result = await new BackendClient(backendUrl).lookupDns(query);
+      if (process.platform !== "win32") {
+        throw new DnsHelperError(
+          "unsupported_platform",
+          "DNS Lookup currently uses Resolve-DnsName on the local Windows workstation.",
+        );
+      }
+      const query = normalizeDnsQuery(input);
+      const helperPath = context.asAbsolutePath("helper/dns/main.ps1");
+      const result = await vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: `Resolving ${query} locally...`,
+          cancellable: true,
+        },
+        async (_progress, token) => lookupDns(helperPath, query, token),
+      );
+      if (result.status !== "success") {
+        await vscode.window.showErrorMessage(result.message);
+        return;
+      }
 
       outputChannel.clear();
       outputChannel.appendLine(formatDnsLookup(result));
@@ -55,39 +60,15 @@ function getSelectedText(): string | undefined {
 
 async function promptForDnsQuery(): Promise<string | undefined> {
   return vscode.window.showInputBox({
-    prompt: "Hostname or IP address to resolve from the lab server",
+    prompt: "Hostname or IP address to resolve on this Windows workstation",
     placeHolder: "example.com",
     ignoreFocusOut: true,
   });
 }
 
 function toUserMessage(error: unknown): string {
-  if (error instanceof BackendConfigurationError) {
+  if (error instanceof DnsValidationError || error instanceof DnsHelperError) {
     return error.message;
   }
-  if (error instanceof BackendUnavailableError) {
-    return (
-      "Unable to reach the Network Engineer Toolkit backend. " +
-      "Check networkEngineerToolkit.backendUrl and confirm the lab server is running."
-    );
-  }
-  if (error instanceof BackendTimeoutError) {
-    return "The Network Engineer Toolkit backend request timed out.";
-  }
-  if (error instanceof MalformedBackendResponseError) {
-    return error.message;
-  }
-  if (error instanceof BackendHttpError) {
-    if (error.status === 400) {
-      return `Invalid DNS query: ${error.message}`;
-    }
-    if (error.status === 404) {
-      return `DNS resolution failed on the lab server: ${error.message}`;
-    }
-    if (error.status === 504) {
-      return "DNS resolution timed out on the lab server.";
-    }
-    return `Lab server request failed: ${error.message}`;
-  }
-  return "Remote DNS lookup failed unexpectedly.";
+  return "Local DNS lookup failed unexpectedly.";
 }

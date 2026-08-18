@@ -1,8 +1,8 @@
-import { DnsLookupResponse } from "./backendClient";
+import { DnsLookupSuccess } from "./models";
 
-export function formatDnsLookup(result: DnsLookupResponse): string {
+export function formatDnsLookup(result: DnsLookupSuccess): string {
   const lines = [
-    "Remote DNS Lookup",
+    "Local DNS Lookup",
     "────────────────────────────────",
     "",
     formatLine("Query", result.query),
@@ -10,7 +10,7 @@ export function formatDnsLookup(result: DnsLookupResponse): string {
       "Lookup Type",
       result.lookup_type === "forward" ? "Forward" : "Reverse",
     ),
-    formatLine("Executed By", result.executed_by),
+    formatLine("Execution", "Local Windows workstation"),
   ];
 
   if (result.lookup_type === "reverse") {
