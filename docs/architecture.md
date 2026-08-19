@@ -44,8 +44,9 @@ helpers do not own product workflows or become independently operated programs.
 The extension contributes one Activity Bar view container, **Network Engineer
 Toolkit**, with a **Tools** view. That view uses Welcome content whose buttons
 invoke the existing Command Palette commands. It does not use Tree View items as
-fake buttons. Tree Views remain reserved for later tools such as Scanner and Path
-Monitor.
+fake buttons. **Network Scanner** is the first structured Tree View: TypeScript
+stores validated scan results and exposes subnet, device, and available-detail
+nodes through native TreeItems.
 
 The active repository boundary is:
 
@@ -54,8 +55,10 @@ extension/
   src/                 TypeScript product and orchestration code
   helper/dns/          bounded local PowerShell capability
   helper/switchport/   bounded local Python capability
+  helper/scanner/      bounded local Python network discovery capability
   test/                TypeScript contract and product-logic tests
   helper/test/         Python helper tests
+  helper/test_scanner/ Python scanner helper tests
 docs/                  architecture and development documentation
 ```
 
@@ -95,6 +98,14 @@ concurrent network operations.
 **Network Tools: Discover Switchport** is the current reference. The extension
 owns the workflow while a bounded Python helper performs local packet capture and
 returns structured data.
+
+**Network Tools: Scan Network** follows the same ownership model. For a directly
+connected IPv4 subnet, the helper performs one bounded ARP sweep and may report
+MAC addresses from endpoint ARP replies. For a routed subnet, it performs bounded
+ICMP discovery and deliberately omits MAC addresses because the workstation can
+only learn its next hop at Layer 2. PTR enrichment is concurrent and optional;
+lookup failure never removes an otherwise discovered device. The helper exits
+after returning one structured result and does not persist inventory.
 
 ## Helper execution model
 

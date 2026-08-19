@@ -41,12 +41,29 @@ tries `py -3` and then `python`.
 Python, Scapy, and Npcap are not bundled in v0.1.x. Npcap remains an explicit
 prerequisite; no redistribution or installer assumptions are made.
 
+## Scan an IPv4 network
+
+Open **Network Scanner** in the Toolkit sidebar and select **Scan Network**, or run
+**Network Tools: Scan Network** from the Command Palette. Enter an IPv4 subnet in
+CIDR notation. The first scanner milestone supports at most 254 usable hosts
+(`/24` or a smaller host range); larger requests are rejected rather than
+truncated.
+
+The bounded one-shot Python helper uses ARP for a directly connected Layer-2
+subnet and reports MAC addresses only from those ARP responses. Routed targets use
+ICMP discovery and never inherit the next-hop router's MAC address. PTR lookup can
+add a hostname, but DNS failure does not remove a discovered device. Results stay
+in the native **Network Scanner** Tree View until another scan or **Clear Results**.
+
+Network scanning requires Python 3, Scapy, and Npcap. It does not perform port,
+service, operating-system, or vulnerability scanning.
+
 ## Requirements
 
 - Windows
 - Visual Studio Code 1.85.0 or newer
 - Windows PowerShell for local DNS lookups
-- Python 3, Scapy, and Npcap for Switchport Discovery
+- Python 3, Scapy, and Npcap for Switchport Discovery and Network Scanner
 
 Wireshark, TShark, Ubuntu, and a Toolkit backend are not required. The extension
 runs locally and does not start or contact a Toolkit server.
@@ -89,6 +106,7 @@ Run local checks from this directory:
 npm install
 npm test
 python -m unittest discover -s helper/test -v
+python -m unittest discover -s helper/test_scanner -v
 powershell.exe -NoLogo -NoProfile -NonInteractive `
   -File helper/dns/main.ps1 -Query example.com
 ```

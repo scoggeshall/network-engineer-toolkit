@@ -15,6 +15,8 @@ Current tools:
   PowerShell helper using `Resolve-DnsName`.
 - **Network Tools: Discover Switchport** — passive local LLDP/CDP capture through
   a one-shot Python/Scapy helper and Npcap.
+- **Network Tools: Scan Network** — bounded IPv4 device discovery with a structured
+  Network Scanner Tree View, direct-L2 ARP, routed ICMP, and optional PTR identity.
 
 The Toolkit does not run a server, daemon, localhost API, or remote execution
 tier. Network devices and services can be tool targets or data sources, but all

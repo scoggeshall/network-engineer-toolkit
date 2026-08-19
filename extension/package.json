@@ -18,6 +18,8 @@
     "network-engineering",
     "dns",
     "subnet",
+    "scanner",
+    "discovery",
     "lldp",
     "cdp"
   ],
@@ -41,6 +43,16 @@
       {
         "command": "networkEngineerToolkit.dnsLookup",
         "title": "Network Tools: DNS Lookup"
+      },
+      {
+        "command": "networkEngineerToolkit.scanNetwork",
+        "title": "Network Tools: Scan Network",
+        "icon": "$(search)"
+      },
+      {
+        "command": "networkEngineerToolkit.clearScanResults",
+        "title": "Network Tools: Clear Network Scan Results",
+        "icon": "$(clear-all)"
       }
     ],
     "viewsContainers": {
@@ -58,6 +70,10 @@
           "id": "networkEngineerToolkit.tools",
           "name": "Tools",
           "icon": "assets/pyscout-activity.svg"
+        },
+        {
+          "id": "networkEngineerToolkit.scanner",
+          "name": "Network Scanner"
         }
       ]
     },
@@ -65,8 +81,26 @@
       {
         "view": "networkEngineerToolkit.tools",
         "contents": "NETWORK ENGINEER TOOLKIT\nNetwork Tools\n[Analyze IP/Subnet](command:networkEngineerToolkit.analyzeSubnet)\n[DNS Lookup](command:networkEngineerToolkit.dnsLookup)\n[Discover Switchport](command:networkEngineerToolkit.discoverSwitchport)"
+      },
+      {
+        "view": "networkEngineerToolkit.scanner",
+        "contents": "No network scan results.\n[Scan Network](command:networkEngineerToolkit.scanNetwork)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "networkEngineerToolkit.scanNetwork",
+          "when": "view == networkEngineerToolkit.scanner",
+          "group": "navigation@1"
+        },
+        {
+          "command": "networkEngineerToolkit.clearScanResults",
+          "when": "view == networkEngineerToolkit.scanner",
+          "group": "navigation@2"
+        }
+      ]
+    },
     "configuration": {
       "title": "Network Engineer Toolkit",
       "properties": {
@@ -74,7 +108,7 @@
           "type": "string",
           "default": "",
           "scope": "machine",
-          "description": "Optional Python 3 executable used by the local Switchport Discovery helper during development."
+          "description": "Optional Python 3 executable used by local Python helpers during development."
         }
       }
     }

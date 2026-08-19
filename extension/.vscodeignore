@@ -2,6 +2,7 @@
 src/**
 test/**
 helper/test/**
+helper/test_scanner/**
 out/test/**
 **/*.map
 tsconfig.json
