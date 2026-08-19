@@ -1,0 +1,107 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import path from "node:path";
+import { describe, it } from "node:test";
+
+const extensionRoot = path.resolve(__dirname, "..", "..");
+
+interface ExtensionManifest {
+  version: string;
+  icon: string;
+  contributes: {
+    commands: Array<{ command: string; title: string }>;
+    viewsContainers: {
+      activitybar: Array<{ id: string; title: string; icon: string }>;
+    };
+    views: {
+      networkEngineerToolkit: Array<{ id: string; name: string; icon?: string }>;
+    };
+    viewsWelcome: Array<{ view: string; contents: string }>;
+  };
+}
+
+function loadManifest(): ExtensionManifest {
+  const raw = readFileSync(path.join(extensionRoot, "package.json"), "utf8");
+  return JSON.parse(raw) as ExtensionManifest;
+}
+
+describe("package contributions", () => {
+  const manifest = loadManifest();
+
+  it("keeps the marketplace icon as the color Py Scout PNG", () => {
+    assert.equal(manifest.icon, "assets/pyscout.png");
+    assert.equal(manifest.version, "0.1.1");
+  });
+
+  it("contributes one Activity Bar view container", () => {
+    const containers = manifest.contributes.viewsContainers.activitybar;
+    assert.equal(containers.length, 1);
+    assert.deepEqual(containers[0], {
+      id: "networkEngineerToolkit",
+      title: "Network Engineer Toolkit",
+      icon: "assets/pyscout-activity.svg",
+    });
+  });
+
+  it("contributes an empty Tools view for Welcome content", () => {
+    const views = manifest.contributes.views.networkEngineerToolkit;
+    assert.equal(views.length, 1);
+    assert.equal(views[0].id, "networkEngineerToolkit.tools");
+    assert.equal(views[0].name, "Tools");
+    assert.equal(views[0].icon, "assets/pyscout-activity.svg");
+  });
+
+  it("uses viewsWelcome buttons that invoke existing commands", () => {
+    const welcome = manifest.contributes.viewsWelcome;
+    assert.equal(welcome.length, 1);
+    assert.equal(welcome[0].view, "networkEngineerToolkit.tools");
+
+    const contents = welcome[0].contents;
+    assert.match(contents, /^NETWORK ENGINEER TOOLKIT/m);
+    assert.match(contents, /^Network Tools$/m);
+    assert.match(
+      contents,
+      /\[Analyze IP\/Subnet\]\(command:networkEngineerToolkit\.analyzeSubnet\)/,
+    );
+    assert.match(
+      contents,
+      /\[DNS Lookup\]\(command:networkEngineerToolkit\.dnsLookup\)/,
+    );
+    assert.match(
+      contents,
+      /\[Discover Switchport\]\(command:networkEngineerToolkit\.discoverSwitchport\)/,
+    );
+    assert.doesNotMatch(contents, /\bv\d+\.\d+\.\d+\b/);
+
+    const commandIds = manifest.contributes.commands.map((entry) => entry.command);
+    assert.deepEqual(
+      new Set(commandIds),
+      new Set([
+        "networkEngineerToolkit.analyzeSubnet",
+        "networkEngineerToolkit.dnsLookup",
+        "networkEngineerToolkit.discoverSwitchport",
+      ]),
+    );
+    assert.equal(commandIds.length, 3);
+
+    const toolsViewSource = readFileSync(
+      path.join(extensionRoot, "src", "views", "toolsView.ts"),
+      "utf8",
+    );
+    assert.match(toolsViewSource, /registerTreeDataProvider/);
+    assert.match(toolsViewSource, /getChildren\(\): never\[\] \{\s*return \[\];\s*\}/);
+    assert.doesNotMatch(toolsViewSource, /command:/);
+  });
+
+  it("ships a 24x24 monochrome Activity Bar SVG instead of the color PNG", () => {
+    const iconPath = path.join(extensionRoot, "assets", "pyscout-activity.svg");
+    assert.equal(existsSync(iconPath), true);
+
+    const svg = readFileSync(iconPath, "utf8");
+    assert.match(svg, /viewBox="0 0 24 24"/);
+    assert.match(svg, /width="24"/);
+    assert.match(svg, /height="24"/);
+    assert.doesNotMatch(svg, /pyscout\.png/);
+    assert.doesNotMatch(svg, /#[Ff]{2}[Dd]{2}00|#FFD700|#FFC107|#2196[Ff]{2}|#1[Ee]3[Aa]8[Aa]|rgb\(/i);
+  });
+});

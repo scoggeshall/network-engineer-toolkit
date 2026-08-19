@@ -2,6 +2,10 @@
 
 Local network engineering tools for Visual Studio Code on Windows.
 
+Open the **Network Engineer Toolkit** icon on the Activity Bar, then run a tool
+from the **Tools** view. The same commands are also available from the Command
+Palette.
+
 ## Analyze an IPv4 subnet
 
 Run **Network Tools: Analyze IP/Subnet** from the Command Palette. Enter an IPv4

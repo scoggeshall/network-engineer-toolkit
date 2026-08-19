@@ -43,6 +43,30 @@
         "title": "Network Tools: DNS Lookup"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "networkEngineerToolkit",
+          "title": "Network Engineer Toolkit",
+          "icon": "assets/pyscout-activity.svg"
+        }
+      ]
+    },
+    "views": {
+      "networkEngineerToolkit": [
+        {
+          "id": "networkEngineerToolkit.tools",
+          "name": "Tools",
+          "icon": "assets/pyscout-activity.svg"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "networkEngineerToolkit.tools",
+        "contents": "NETWORK ENGINEER TOOLKIT\nNetwork Tools\n[Analyze IP/Subnet](command:networkEngineerToolkit.analyzeSubnet)\n[DNS Lookup](command:networkEngineerToolkit.dnsLookup)\n[Discover Switchport](command:networkEngineerToolkit.discoverSwitchport)"
+      }
+    ],
     "configuration": {
       "title": "Network Engineer Toolkit",
       "properties": {

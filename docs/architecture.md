@@ -41,6 +41,12 @@ collects input, validates requests, manages progress and cancellation, selects
 bounded capabilities, validates structured results, and presents output. Local
 helpers do not own product workflows or become independently operated programs.
 
+The extension contributes one Activity Bar view container, **Network Engineer
+Toolkit**, with a **Tools** view. That view uses Welcome content whose buttons
+invoke the existing Command Palette commands. It does not use Tree View items as
+fake buttons. Tree Views remain reserved for later tools such as Scanner and Path
+Monitor.
+
 The active repository boundary is:
 
 ```text
@@ -57,11 +63,11 @@ docs/                  architecture and development documentation
 
 ### TypeScript
 
-Use TypeScript for VS Code APIs, Command Palette commands, Quick Picks, Tree Views,
-justified webviews, extension settings, progress and cancellation, typed models,
-validation, result presentation, clipboard and file integration, simple
-calculations, lightweight parsing, pure local application logic, and orchestration
-of bounded helpers.
+Use TypeScript for VS Code APIs, Command Palette commands, Quick Picks, Activity
+Bar views, Welcome content, Tree Views, justified webviews, extension settings,
+progress and cancellation, typed models, validation, result presentation,
+clipboard and file integration, simple calculations, lightweight parsing, pure
+local application logic, and orchestration of bounded helpers.
 
 **Network Tools: Analyze IP/Subnet** is the current reference for pure TypeScript
 local logic.

@@ -5,6 +5,9 @@ engineering workflows. TypeScript owns the product experience and orchestrates
 bounded local PowerShell or Python helpers when Windows APIs or protocol libraries
 are the better implementation fit.
 
+Open the **Network Engineer Toolkit** icon on the Activity Bar to run tools from
+the **Tools** view, or invoke the same commands from the Command Palette.
+
 Current tools:
 
 - **Network Tools: Analyze IP/Subnet** — pure TypeScript IPv4 subnet analysis.
