@@ -108,7 +108,7 @@
           "type": "string",
           "default": "",
           "scope": "machine",
-          "description": "Optional Python 3 executable used by local Python helpers during development."
+          "description": "Optional Python 3 executable used by Network Scanner and Switchport Discovery. Leave blank to use the default Python launcher/runtime."
         }
       }
     }

@@ -1,115 +1,154 @@
-# Network Engineer Toolkit for VS Code
+# Network Engineer Toolkit
 
-Local network engineering tools for Visual Studio Code on Windows.
+<p align="center">
+  <img src="assets/pyscout.png" alt="Py Scout, the Network Engineer Toolkit logo" width="180">
+</p>
 
-Open the **Network Engineer Toolkit** icon on the Activity Bar, then run a tool
-from the **Tools** view. The same commands are also available from the Command
-Palette.
+Network Engineer Toolkit is a Visual Studio Code extension for common Windows
+networking tasks. Analyze IPv4 subnets, resolve DNS names and addresses, identify
+the connected switchport, and discover devices on an IPv4 network without
+leaving VS Code.
 
-## Analyze an IPv4 subnet
+> **Release availability:** The latest published VSIX, `v0.1.1`, includes
+> Analyze IP/Subnet, DNS Lookup, and Discover Switchport through the Command
+> Palette. The Activity Bar interface and Network Scanner described below are
+> available on the current `main` branch but are not yet included in a published
+> VSIX. Check [Releases](https://github.com/scoggeshall/network-engineer-toolkit/releases)
+> for the next packaged version.
 
-Run **Network Tools: Analyze IP/Subnet** from the Command Palette. Enter an IPv4
-address with an optional CIDR prefix, such as `10.40.52.17/27`. A bare address is
-treated as a `/32` host route.
+## Features
 
-If the active editor has selected text, a valid selection is analyzed directly.
-An invalid selection opens the input box with that text ready to correct. Results
-are shown in the **Network Engineer Toolkit** Output Channel. The subnet engine is
-pure TypeScript.
+### Analyze IP/Subnet
 
-## DNS lookup
+Enter an IPv4 address with an optional CIDR prefix, such as
+`10.150.76.1/24`. A bare IPv4 address is treated as a `/32` host route.
 
-Run **Network Tools: DNS Lookup**. Enter or select a hostname, IPv4 address, or IPv6
-address. TypeScript validates the query and invokes a bounded one-shot PowerShell
-helper that uses the local workstation's `Resolve-DnsName` capability, returns
-structured JSON, and exits. The operation supports cancellation and a timeout; it
-does not call a Toolkit server or start a persistent process.
+The result includes:
 
-## Discover a connected switchport
+- Subnet and wildcard masks
+- Network and broadcast addresses
+- First and last usable addresses
+- Total address and usable host counts
 
-Run **Network Tools: Discover Switchport**, then explicitly select the local
-Windows adapter connected to the switch. The command passively listens for LLDP
-and CDP advertisements and shows the best correlated switch identity, port, and
-management details in the **Network Engineer Toolkit** Output Channel. It sends no
-discovery traffic and does not require Internet access.
+Results open in the **Network Engineer Toolkit** Output panel. You can also
+select a valid IPv4 address or CIDR in the active editor before starting the
+tool.
 
-Local capture requires Python 3, Scapy, and the Npcap Windows capture driver.
-Wireshark and TShark are not used or required. The optional
-`networkEngineerToolkit.pythonPath` setting selects Python; otherwise the extension
-tries `py -3` and then `python`.
+### DNS Lookup
 
-Python, Scapy, and Npcap are not bundled in v0.1.x. Npcap remains an explicit
-prerequisite; no redistribution or installer assumptions are made.
+Resolve a hostname to its IPv4 or IPv6 addresses, or perform a reverse lookup
+from an IP address to a hostname. For example, enter `google.com` for a forward
+lookup or `8.8.8.8` for a reverse lookup.
 
-## Scan an IPv4 network
+DNS results open in the **Network Engineer Toolkit** Output panel. A valid
+hostname or address selected in the active editor can be used directly.
 
-Open **Network Scanner** in the Toolkit sidebar and select **Scan Network**, or run
-**Network Tools: Scan Network** from the Command Palette. Enter an IPv4 subnet in
-CIDR notation. The first scanner milestone supports at most 254 usable hosts
-(`/24` or a smaller host range); larger requests are rejected rather than
-truncated.
+### Discover Switchport
 
-The bounded one-shot Python helper uses ARP for a directly connected Layer-2
-subnet and reports MAC addresses only from those ARP responses. Routed targets use
-ICMP discovery and never inherit the next-hop router's MAC address. PTR lookup can
-add a hostname, but DNS failure does not remove a discovered device. Results stay
-in the native **Network Scanner** Tree View until another scan or **Clear Results**.
+Select the connected Windows Ethernet adapter, then listen for LLDP or CDP
+advertisements from the network device. When advertised, the result can include:
 
-Network scanning requires Python 3, Scapy, and Npcap. It does not perform port,
-service, operating-system, or vulnerability scanning.
+- Switch name and port
+- Management address
+- Platform and capabilities
+- Software information
+
+This feature requires Python 3, Scapy, and Npcap. Discovery also depends on the
+connected switch advertising LLDP or CDP; if no advertisement is received, the
+Toolkit may not be able to identify the switchport.
+
+### Network Scanner
+
+Scan an IPv4 subnet in CIDR notation and view discovered devices in the
+**Network Scanner** section of the sidebar. Each result can show:
+
+- IP address
+- Hostname, when available
+- MAC address, when observable on the local network
+- Discovery method, latency, and other available identity information
+
+Scans are limited to 254 hosts. Results remain in the sidebar until you start
+another scan or select **Clear Network Scan Results**. Not every device has a
+resolvable hostname. MAC addresses are shown when they can be observed on the
+local network; routed devices may not have a MAC address displayed.
+
+Network Scanner requires Python 3, Scapy, and Npcap.
 
 ## Requirements
 
 - Windows
 - Visual Studio Code 1.85.0 or newer
-- Windows PowerShell for local DNS lookups
-- Python 3, Scapy, and Npcap for Switchport Discovery and Network Scanner
+- Windows PowerShell for DNS Lookup
+- Python 3, Scapy, and Npcap for Discover Switchport and Network Scanner
 
-Wireshark, TShark, Ubuntu, and a Toolkit backend are not required. The extension
-runs locally and does not start or contact a Toolkit server.
+Analyze IP/Subnet has no additional prerequisites.
 
-## Build an installable VSIX
+## Install the extension
 
-From the `extension` directory:
+1. Open the [Network Engineer Toolkit Releases page](https://github.com/scoggeshall/network-engineer-toolkit/releases).
+2. Download the latest `.vsix` file.
+3. In Visual Studio Code, open **Extensions**.
+4. Open the Extensions menu (**Views and More Actions**).
+5. Select **Install from VSIX...**.
+6. Select the downloaded Network Engineer Toolkit VSIX.
+7. Reload Visual Studio Code if prompted.
 
-```powershell
-npm install
-npm run package
-```
+## Set up Python, Scapy, and Npcap
 
-The package command performs a clean production TypeScript compile and writes
-`dist/network-engineer-toolkit-0.1.1.vsix`. The production package includes the
-compiled extension and its PowerShell and Python helper source, but excludes test
-code and development artifacts.
+Discover Switchport and Network Scanner need Python 3 with Scapy, plus the Npcap
+packet capture driver for Windows.
 
-## Install v0.1.1
+1. Install Python 3.
+2. Install Scapy for that Python installation:
 
-In VS Code, open **Extensions**, choose **Views and More Actions...**, select
-**Install from VSIX...**, and choose `network-engineer-toolkit-0.1.1.vsix`.
+   ```powershell
+   py -3 -m pip install scapy
+   ```
 
-For an isolated named profile, use the profile-specific CLI form:
+3. Install [Npcap](https://npcap.com/#download) for Windows.
 
-```powershell
-code --profile "Network Engineer Toolkit Dev" --install-extension `
-  .\dist\network-engineer-toolkit-0.1.1.vsix
-```
+The Toolkit normally tries the Python launcher (`py -3`) and then `python`. To
+use a specific Python installation, open VS Code Settings, search for
+**Network Engineer Toolkit: Python Path**, and enter the full path to its Python
+executable.
 
-This repository uses the existing `Network Engineer Toolkit Dev` profile for
-installed-extension testing. Do not install development builds into a normal or
-default VS Code profile.
+## Use the extension
 
-## Development
+1. Open Visual Studio Code.
+2. Select the **Network Engineer Toolkit** icon in the Activity Bar.
+3. In **Tools**, select **Analyze IP/Subnet**, **DNS Lookup**, or
+   **Discover Switchport**.
+4. In **Network Scanner**, select **Scan Network** to start a scan and expand the
+   results to view device details.
 
-Run local checks from this directory:
+The same commands are available through the Command Palette: press
+<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> and search for `Network Tools`.
 
-```powershell
-npm install
-npm test
-python -m unittest discover -s helper/test -v
-python -m unittest discover -s helper/test_scanner -v
-powershell.exe -NoLogo -NoProfile -NonInteractive `
-  -File helper/dns/main.ps1 -Query example.com
-```
+## Troubleshooting
 
-GUI testing is restricted to the existing `Network Engineer Toolkit Dev` VS Code
-profile. Do not modify the normal/default profile or global VS Code environment.
+### Network Scanner or Discover Switchport cannot start
+
+Confirm that Python 3, Scapy, and Npcap are installed. If you have multiple
+Python installations, set **Network Engineer Toolkit: Python Path** to the
+Python executable where Scapy is installed.
+
+### Discover Switchport finds nothing
+
+Select the Ethernet adapter connected to the switch and confirm that the link is
+up. The connected network device must advertise LLDP or CDP for the Toolkit to
+identify it.
+
+### Network Scanner shows no hostname
+
+Not every device publishes or has a resolvable hostname. The device can still
+appear by IP address.
+
+### A routed scan shows no MAC address
+
+This is expected for devices outside the local Layer 2 network. A remote
+device's MAC address is not normally visible across a router.
+
+## Releases and support
+
+- Download packaged versions from [Releases](https://github.com/scoggeshall/network-engineer-toolkit/releases).
+- Report bugs or request help through [GitHub Issues](https://github.com/scoggeshall/network-engineer-toolkit/issues).
