@@ -33,7 +33,7 @@ describe("package contributions", () => {
 
   it("keeps the marketplace icon as the color Py Scout PNG", () => {
     assert.equal(manifest.icon, "assets/pyscout.png");
-    assert.equal(manifest.version, "0.1.1");
+    assert.equal(manifest.version, "0.2.0");
   });
 
   it("contributes one Activity Bar view container", () => {

@@ -2,7 +2,7 @@
   "name": "network-engineer-toolkit",
   "displayName": "Network Engineer Toolkit",
   "description": "Local network engineering tools for Visual Studio Code.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "scoggeshall",
   "icon": "assets/pyscout.png",
   "repository": {
